@@ -6,10 +6,12 @@ class Activation:
     def __init__(self):
         pass
 
-    def forward(self, z):
+    @staticmethod
+    def forward(z):
         return z
 
-    def backward(self, p, z):
+    @staticmethod
+    def backward(p, z):
         return p
 
 
@@ -18,21 +20,26 @@ class Sigmoid(Activation):
     def __init__(self):
         Activation.__init__(self)
 
-    def forward(self, z):
-        return 1 / (1 + np.exp(-z))
+    @staticmethod
+    def forward(z):
+        return 1 / (1 + np.exp(np.dot(-1, z)))
 
-    def backward(self, p, z):
-        pass
+    @staticmethod
+    def backward(p, z):
+        dfdz = Sigmoid.forward(z) * (1 - Sigmoid.forward(z))
+        return p * dfdz
 
 
 class ReLU(Activation):
     def __init__(self):
         Activation.__init__(self)
 
-    def forward(self, z):
+    @staticmethod
+    def forward(z):
         return max(z, 0)
 
-    def backward(self, p, z):
-        if z>0:
-            return z
+    @staticmethod
+    def backward(p, z):
+        if z > 0:
+            return p
         return 0
